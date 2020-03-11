@@ -49,7 +49,7 @@ class AgentDDQN:
         self.experience_replay.store(state, action, reward, state_, terminal)
 
     def learn(self):
-        if self.experience_replay.index < 100:
+        if self.experience_replay.index < 600:
             return
 
         self.optimizer.zero_grad()
@@ -76,3 +76,19 @@ class AgentDDQN:
 
         if self.epsilon > self.epsilon_min:
             self.epsilon = max(self.epsilon - self.epsilon_dec, self.epsilon_min)
+
+    def save_model(self):
+        torch.save(self.online_model, self.path + "_online.pt")
+        torch.save(self.target_model, self.path + "_target.pt")
+
+    def load_model(self):
+        if torch.cuda.is_available():
+            self.online_model = torch.load(self.path + "_online.pt")
+        else:
+            self.online_model = torch.load(self.path + "_online.pt", map_location = torch.device('cpu'))
+        self.online_model.eval()
+        if torch.cuda.is_available():
+            self.target_model = torch.load(self.path + "_target.pt")
+        else:
+            self.online_model = torch.load(self.path + "_target.pt", map_location=torch.device('cpu'))
+        self.target_model.eval()
