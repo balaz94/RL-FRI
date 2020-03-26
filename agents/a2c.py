@@ -35,6 +35,7 @@ class AgentA2C:
         return action[0].item()
 
     def learn(self, workers, max_steps, max_iteration, write=True, start_iteration=0):
+        self.load_model()
         len_workers = len(workers)
         observations = []
         for worker in workers:
@@ -124,7 +125,7 @@ class AgentA2C:
                         torch.save(self.model.state_dict(), 'trained_models/' + self.name + '_' + str(self.id) + '_' + str(iteration) + '_a2c.pt')
 
     def load_model(self):
-        self.model.load_state_dict(torch.load('trained_models/' + self.name))
+        self.model.load_state_dict(torch.load('trained_models/' + self.name + '_' + str(self.id) + '_a2c.pt'))
 
     def save_model(self):
         torch.save(self.model.state_dict(), 'trained_models/' + self.name + '_' + str(self.id) + '_a2c.pt')
