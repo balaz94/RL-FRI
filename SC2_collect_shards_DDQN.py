@@ -89,7 +89,7 @@ def animation():
     env = Env()
 
     actions = 2*64*64
-    input_dim = (2,64,64)
+    input_dim = (3,64,64)
 
     scores = []
     avg_scores = deque([])
