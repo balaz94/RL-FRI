@@ -129,6 +129,7 @@ class AgentPPO:
             self.optimizer.zero_grad()
             loss = policy_loss.mean() + self.value_loss_coef * value_loss.mean()
             loss.backward()
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.1)
             self.optimizer.step()
 
             avg = np.average(self.average_score[-100:])
